@@ -125,10 +125,14 @@ class FixedSizedRecorder(BaseRecorder):
                 "For FixedSizeRecorder 'stop_time' and 'step_size' need to be defined "
                 "in the recorder_config."
             )
+        if "stop_time" not in self.recorder_config:
+            raise ValueError("'stop_time' needs to be defined in the recorder_config.")
+        if "step_size" not in self.recorder_config:
+            raise ValueError("'step_size' needs to be defined in the recorder_config")
         self.stop_time: float = self.recorder_config["stop_time"]
         self.step_size: float = self.recorder_config["step_size"]
         self.logging_step_size: float = self.recorder_config.get(
-            "logging_step_size", "step_size"
+            "logging_step_size", self.step_size
         )
         self.logging_multiple = round(self.logging_step_size / self.step_size)
         number_log_steps = int(self.stop_time / self.logging_step_size) + 1
